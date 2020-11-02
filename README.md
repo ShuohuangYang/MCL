@@ -1,4 +1,7 @@
 # Multi-Robot Colloaborative Localization
 
-## To install:
-From the root of the directory: `install --from-paths src --ignore-src -r -y`
+## Installing prerequisites:
+From the root of the directory, run: `install --from-paths src --ignore-src -r -y`
+
+## Compiling:
+From the root of the directory, run: `catkin_make_isolated`
