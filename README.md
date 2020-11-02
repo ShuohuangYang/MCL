@@ -8,3 +8,15 @@ From the root of the directory, run: `rosdep install --from-paths src --ignore-s
 
 ## Compiling:
 From the root of the directory, run: `catkin_make_isolated`
+
+## Simulatuions:
+Simulations are based on the turtlebot3 tutorials and minor changes are needed.
+(We need to combine these into a launch file later!!)
+### Gazebo environment:
+`export TURTLEBOT3_MODEL=burger`
+
+`roslaunch turtlebot3_gazebo multi_turtlebot3.launch`
+### Image process node:
+`ROS_NAMESPACE=tb3_0/rrbot/camera1 rosrun image_proc image_proc`
+### Apriltag node:
+`roslaunch apriltag_ros continuous_detection.launch`
