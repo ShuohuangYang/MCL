@@ -6,6 +6,9 @@ Because of the submodules, you will need to clone with the following command: `g
 ## Installing prerequisites:
 From the root of the directory, run: `rosdep install --from-paths src --ignore-src -r -y`
 
+## Modified files 
+To satisfy project target, several files under submodule are modified. To change the files as required, checkout to branch `demo` and download those changed files under `src_changed`, then substitue original files with corresponding ones.
+
 ## Compiling:
 From the root of the directory, run: `catkin_make_isolated`
 
