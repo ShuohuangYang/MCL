@@ -16,7 +16,7 @@ Simulations are based on the turtlebot3 tutorials and minor changes are needed.
 
 ```
 export TURTLEBOT3_MODEL=burger
-source devel/setup.bash
+source devel_isolated/setup.bash
 roslaunch turtlebot3_gazebo multi_turtlebot3.launch
 ```
 
