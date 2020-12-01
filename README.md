@@ -12,7 +12,7 @@ To satisfy project target, several files under submodule are modified. To change
 ## Compiling:
 From the root of the directory, run: `catkin_make_isolated`
 
-## Simulatuions:
+## Simulations:
 Simulations are based on the turtlebot3 tutorials and minor changes are needed.
 (We need to combine these into a launch file later!!)
 ### To launch the Gazebo environment:
@@ -22,6 +22,10 @@ export TURTLEBOT3_MODEL=burger
 source devel_isolated/setup.bash
 roslaunch turtlebot3_gazebo multi_turtlebot3.launch
 ```
+
+### And to launch the visualizer:
+`rosrun rviz rviz`
+Then from rviz, open the rviz config file in the mcl/config folder.
 
 ### Image process node:
 `ROS_NAMESPACE=tb3_0/rrbot/camera1 rosrun image_proc image_proc`
