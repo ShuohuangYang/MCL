@@ -131,6 +131,8 @@
 
   <link name="imu_link"/>
 
+  <!-- Primary robot has no scanner -->
+  <!-- 
   <joint name="scan_joint" type="fixed">
     <parent link="base_link"/>
     <child link="base_scan"/>
@@ -160,7 +162,7 @@
                iyy="0.001" iyz="0.0"
                izz="0.001" />
     </inertial>\`
-  </link>
+  </link> -->
 
   <!-- April Tag -->
   <link name="april_tag">
@@ -172,9 +174,9 @@
     </visual>
   </link>
   <joint name="apriltag_joint" type="fixed">
-    <parent link="base_scan"/>
+    <parent link="base_link"/>
     <child link="april_tag"/>
-    <origin xyz="0 0 0.034" rpy="0 0 0"/>
+    <origin xyz="0 0 0.206" rpy="0 0 0"/>
   </joint>
 
 </robot>

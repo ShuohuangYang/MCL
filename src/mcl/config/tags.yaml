@@ -1,0 +1,7 @@
+standalone_tags:
+        [
+                {id: 20, size: 0.05},
+                {id: 2, size: 0.05}
+        ]
+               
+tag_bundles: []
