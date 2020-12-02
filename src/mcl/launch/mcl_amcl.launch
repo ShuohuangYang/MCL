@@ -31,7 +31,7 @@
     <!-- Start Map Server for static test map -->
     <node name="map_server" pkg="map_server" type="map_server" args="$(find mcl)/maps/house/house.pgm 0.05"/>
 
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mcl)/models/turtlebot3_burger_apriltag_1.urdf.xacro" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mcl)/models/secondary_robot.urdf.xacro" />
 
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
       <param name="publish_frequency" type="double" value="50.0" />
