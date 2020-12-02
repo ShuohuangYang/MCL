@@ -34,7 +34,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: LaserScan
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -167,39 +167,13 @@ Visualization Manager:
           Value: false
         imu_link:
           Value: false
-        map:
-          Value: false
-        odom:
-          Value: true
-        wheel_left_link:
-          Value: false
-        wheel_right_link:
-          Value: false
-        world:
-          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          odom:
-            base_footprint:
-              base_link:
-                base_scan:
-                  camera_link:
-                    {}
-                caster_back_link:
-                  {}
-                imu_link:
-                  {}
-                wheel_left_link:
-                  {}
-                wheel_right_link:
-                  {}
-        world:
-          {}
+        {}
       Update Interval: 0
       Value: true
     - Alpha: 1
