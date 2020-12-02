@@ -1,4 +1,4 @@
-image: /home/maki/700/map.pgm
+image: /home/maki/700/MCL/src/mcl/maps/test/map.pgm
 resolution: 0.050000
 origin: [0.000000, 0.000000, -nan]
 negate: 0

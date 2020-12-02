@@ -4,7 +4,7 @@
 #include <tf/transform_datatypes.h>
 
 // Simple node that takes Odometry messages from Gazebo
-// and then turns them into tf messages from `map` to `odom`
+// and then turns them into tf messages from `odom` to `base_footprint`
 // lol also turns odom into base_footprint via identity
 
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
@@ -20,11 +20,11 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
 	tf::quaternionMsgToTF(msg->pose.pose.orientation, q);
 	transform.setRotation(q);
 
-	tf::Transform t_id;
-	t_id.setIdentity();
-
-	br.sendTransform(tf::StampedTransform(t_id, ros::Time::now(), "odom", "base_footprint"));
-	br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", "odom"));
+	// tf::Transform t_id;
+	// t_id.setIdentity();
+	// br.sendTransform(tf::StampedTransform(t_id, ros::Time::now(), "odom", "base_footprint"));
+	
+	br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "odom", "base_footprint"));
 	br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "map"));
 }
 
