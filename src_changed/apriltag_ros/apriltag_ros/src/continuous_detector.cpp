@@ -50,7 +50,7 @@ void ContinuousDetector::onInit ()
   
   //change the name of subscribed topic to match what is published by image proc
   camera_image_subscriber_ =
-      it_->subscribeCamera("tb3_0/rrbot/camera1/image_rect", 1,
+      it_->subscribeCamera("image_rect", 1,
                           &ContinuousDetector::imageCallback, this);
   tag_detections_publisher_ =
       nh.advertise<AprilTagDetectionArray>("tag_detections", 1);

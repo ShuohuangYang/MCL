@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="turtlebot3_burger" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find turtlebot3_description)/urdf/common_properties.xacro"/>
-  <xacro:include filename="$(find turtlebot3_description)/urdf/turtlebot3_burger.gazebo.xacro"/>
+  <xacro:include filename="$(find turtlebot3_description)/urdf/turtlebot3_burger_secondary_2.gazebo.xacro"/>
 
   <link name="base_footprint"/>
 
@@ -162,19 +162,35 @@
     </inertial>\`
   </link>
 
-  <!-- April Tag -->
-  <link name="april_tag">
+
+  <!-- Camera -->
+  <joint name="camera_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="0 0 0.023" rpy="0 0 0"/>
+    <parent link="base_scan"/>
+    <child link="camera_link"/>
+  </joint>
+
+  <link name="camera_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="0.025 0.025 0.025"/>
+      </geometry>
+    </collision>
+
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-	<mesh filename="package://turtlebot3_description/meshes/apriltag/ar_tag_1.dae" scale="0.5 0.5 0.5"/>
+    <box size="0.025 0.025 0.025"/>
       </geometry>
+      <material name="dark"/>
     </visual>
-  </link>
-  <joint name="apriltag_joint" type="fixed">
-    <parent link="base_scan"/>
-    <child link="april_tag"/>
-    <origin xyz="0 0 0.034" rpy="0 0 0"/>
-  </joint>
 
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
 </robot>
