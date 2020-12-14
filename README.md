@@ -21,6 +21,6 @@ roslaunch turtlebot3_gazebo multi_turtlebot3.launch
 ```
 
 ### Image process node:
-`ROS_NAMESPACE=tb3_0/rrbot/camera1 rosrun image_proc image_proc`
+`ROS_NAMESPACE=tb3_1/rrbot/camera1 rosrun image_proc image_proc`
 ### Apriltag node:
 `roslaunch apriltag_ros continuous_detection.launch`
