@@ -169,7 +169,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-	<mesh filename="package://mcl/models/apriltag/ar_tag_2.dae" scale="1 1 1"/>
+	<mesh filename="package://mcl/models/apriltag/four_faces.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>

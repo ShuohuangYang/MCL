@@ -83,16 +83,19 @@
       <rosparam file="$(find mcl)/config/global_costmap_params.yaml" command="load" /> 
       <rosparam file="$(find mcl)/config/base_local_planner_params.yaml" command="load" />
     </node>
-  </group>
-
   <!-- April Tag Detection -->
   <node name="april" pkg="apriltag_ros" type="apriltag_ros_continuous_node">
-    <remap from="image_rect" to="/tb3_1/rrbot/camera1/image_raw" />
-    <remap from="camera_info" to="/tb3_1/rrbot/camera1/camera_info" />
+    <remap from="image_rect" to="rrbot/camera1/image_raw" />
+    <remap from="camera_info" to="rrbot/camera1/camera_info" />
+
+    <rosparam command="load" file="$(find apriltag_ros)/config/settings.yaml"/>
+    <rosparam param="standalone_tags">[{id: 2, size: 0.1, frame_id: 2}]</rosparam>
 
     <param name="publish_tf" value="true" />
     <param name="publish_tag_detections_image" value="true" />
   </node>
+  </group>
+
 
   <!-- Start transform from map to odom -->
   <node name="map_to_odom_tf_broadcaster" pkg="mcl" type="map_to_odom_broadcaster" />
