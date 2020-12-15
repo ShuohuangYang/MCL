@@ -3,6 +3,8 @@
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
 
+#include <apriltag_ros/AprilTagDetectionArray.h>
+
 // Simple node that takes Odometry messages from Gazebo
 // and then turns them into tf messages from `odom` to `base_footprint`
 // lol also turns odom into base_footprint via identity
