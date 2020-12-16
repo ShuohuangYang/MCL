@@ -89,7 +89,7 @@
     <remap from="camera_info" to="rrbot/camera1/camera_info" />
 
     <rosparam command="load" file="$(find apriltag_ros)/config/settings.yaml"/>
-    <rosparam param="standalone_tags">[{id: 2, size: 0.1, frame_id: 2}]</rosparam>
+    <rosparam command="load" file="$(find mcl)/config/tags.yaml"/>
 
     <param name="publish_tf" value="true" />
     <param name="publish_tag_detections_image" value="true" />
