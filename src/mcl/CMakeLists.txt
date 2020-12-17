@@ -7,7 +7,14 @@ project(mcl)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS move_base tf roscpp nav_msgs apriltag_ros)
+find_package(catkin REQUIRED COMPONENTS 
+    move_base 
+    tf 
+    roscpp 
+    nav_msgs 
+    apriltag_ros 
+    message_filters
+    geometry_msgs)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -203,3 +210,9 @@ ${catkin_INCLUDE_DIRS}
 
 add_executable(map_to_odom_broadcaster src/odom_to_transform.cpp)
 target_link_libraries(map_to_odom_broadcaster ${catkin_LIBRARIES})
+
+add_executable(calc_pos src/calc_pos.cpp)
+target_link_libraries(calc_pos ${catkin_LIBRARIES})
+
+add_executable(get_apriltag_pos src/get_apriltag_pos.cpp)
+target_link_libraries(get_apriltag_pos ${catkin_LIBRARIES})

@@ -4,13 +4,13 @@
   <arg name="second_tb3" default="tb3_1"/>
   <arg name="third_tb3"  default="tb3_2"/>
 
-  <arg name="first_tb3_x_pos" default=" 8.0"/>
-  <arg name="first_tb3_y_pos" default=" 11.0"/>
+  <arg name="first_tb3_x_pos" default=" 6.0"/>
+  <arg name="first_tb3_y_pos" default=" 12.0"/>
   <arg name="first_tb3_z_pos" default=" 0.0"/>
   <arg name="first_tb3_yaw"   default=" 1.57"/>
 
-  <arg name="second_tb3_x_pos" default=" 6.0"/>
-  <arg name="second_tb3_y_pos" default=" 12.0"/>
+  <arg name="second_tb3_x_pos" default=" 8.0"/>
+  <arg name="second_tb3_y_pos" default=" 11.0"/>
   <arg name="second_tb3_z_pos" default=" 0.0"/>
   <arg name="second_tb3_yaw"   default=" 1.57"/>
 
@@ -68,9 +68,9 @@
       <param name="update_min_d" type="double" value="0.05"/>
       <param name="update_min_a" type="double" value="0.0872665"/>
   
-      <param name="initial_pose_x" value="$(arg first_tb3_x_pos)"/>
-      <param name="initial_pose_y" value="$(arg first_tb3_y_pos)"/>
-      <param name="initial_pose_z" value="$(arg first_tb3_z_pos)"/>
+      <param name="initial_pose_x" value="$(arg second_tb3_x_pos)"/>
+      <param name="initial_pose_y" value="$(arg second_tb3_y_pos)"/>
+      <param name="initial_pose_z" value="$(arg second_tb3_z_pos)"/>
       <param name="initial_pose_a" value="1.57079633"/>
     </node>
     
@@ -83,17 +83,23 @@
       <rosparam file="$(find mcl)/config/global_costmap_params.yaml" command="load" /> 
       <rosparam file="$(find mcl)/config/base_local_planner_params.yaml" command="load" />
     </node>
-  <!-- April Tag Detection -->
-  <node name="april" pkg="apriltag_ros" type="apriltag_ros_continuous_node">
-    <remap from="image_rect" to="rrbot/camera1/image_raw" />
-    <remap from="camera_info" to="rrbot/camera1/camera_info" />
+ 
+   <!-- April Tag Detection -->
+    <node name="april" pkg="apriltag_ros" type="apriltag_ros_continuous_node">
+      <remap from="image_rect" to="rrbot/camera1/image_raw" />
+      <remap from="camera_info" to="rrbot/camera1/camera_info" />
+  
+      <rosparam command="load" file="$(find apriltag_ros)/config/settings.yaml"/>
+      <rosparam command="load" file="$(find mcl)/config/tags.yaml"/>
+  
+      <param name="publish_tf" value="true" />
+      <param name="publish_tag_detections_image" value="true" />
+    </node>
 
-    <rosparam command="load" file="$(find apriltag_ros)/config/settings.yaml"/>
-    <rosparam command="load" file="$(find mcl)/config/tags.yaml"/>
-
-    <param name="publish_tf" value="true" />
-    <param name="publish_tag_detections_image" value="true" />
-  </node>
+    <!-- Publish Apriltag position -->
+    <node name="get_apriltag_pos" pkg="mcl" type="get_apriltag_pos"/>
+    <!-- Use Apriltag Pose to get robot pose-->
+    <node name="calc_pos" pkg="mcl" type="calc_pos"/>
   </group>
 
 
