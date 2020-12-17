@@ -14,7 +14,7 @@
 class SecondaryToPrimary {
   public:
     SecondaryToPrimary() {
-        pub_ = n_.advertise<geometry_msgs::Point>("/primary/estimated_position",100);
+        pub_ = n_.advertise<geometry_msgs::Point>("/primary/points",100);
         sub_tpose_.subscribe(n_, "tag_pose", 1);
         sub_cpose_.subscribe(n_, "amcl_pose", 1);
         
