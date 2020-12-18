@@ -65,8 +65,8 @@
       <param name="base_frame_id" value="$(arg second_tb3)/base_footprint"/>
       <param name="global_frame_id" value = "map"/>
   
-      <param name="update_min_d" type="double" value="0.05"/>
-      <param name="update_min_a" type="double" value="0.0872665"/>
+      <param name="update_min_d" type="double" value="0.01"/>
+      <param name="update_min_a" type="double" value="0.02"/>
   
       <param name="initial_pose_x" value="$(arg second_tb3_x_pos)"/>
       <param name="initial_pose_y" value="$(arg second_tb3_y_pos)"/>
@@ -102,6 +102,8 @@
     <node name="calc_pos" pkg="mcl" type="calc_pos"/>
   </group>
 
+  <!-- Publish estimated pose from secondaries to primary -->
+  <node name="calc_poseWithCovariance" pkg="mcl" type="calc_poseWithCovariance"/>
 
   <!-- Start transform from map to odom -->
   <node name="map_to_odom_tf_broadcaster" pkg="mcl" type="map_to_odom_broadcaster" />

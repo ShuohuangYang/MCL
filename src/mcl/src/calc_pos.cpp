@@ -29,7 +29,8 @@ class SecondaryToPrimary {
       const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& cpose) {
 
 	    geometry_msgs::Point rel_pose = tpose->pose.pose.position;
-        double rel_r = rel_pose.z;
+        double rel_x = rel_pose.x;
+        double rel_z = rel_pose.z;
 
         geometry_msgs::Point cpose_pos = cpose->pose.pose.position;
         double cpose_x = cpose_pos.x;
@@ -45,8 +46,8 @@ class SecondaryToPrimary {
         double theta = atan2(2*(q_w*q_z + q_y*q_x), -1.0 + 2 * (q_w*q_w + q_x*q_x));
 
         geometry_msgs::Point newpt;
-        newpt.x = cpose_x + rel_r * cos(theta);
-        newpt.y = cpose_y + rel_r * sin(theta);
+        newpt.x = cpose_x + rel_z * cos(theta) + rel_x * sin(theta);
+        newpt.y = cpose_y + rel_z * sin(theta) + rel_x * cos(theta);
         newpt.z = 0.1; // Doesn't matter. We're not flying
 
         std_msgs::String dmsg;

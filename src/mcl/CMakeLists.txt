@@ -14,7 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
     nav_msgs 
     apriltag_ros 
     message_filters
-    geometry_msgs)
+    geometry_msgs
+    std_msgs)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -216,3 +217,6 @@ target_link_libraries(calc_pos ${catkin_LIBRARIES})
 
 add_executable(get_apriltag_pos src/get_apriltag_pos.cpp)
 target_link_libraries(get_apriltag_pos ${catkin_LIBRARIES})
+
+add_executable(calc_poseWithCovariance src/calc_poseWithCovariance.cpp)
+target_link_libraries(calc_poseWithCovariance ${catkin_LIBRARIES})
