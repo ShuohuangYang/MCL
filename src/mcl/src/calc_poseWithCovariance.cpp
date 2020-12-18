@@ -21,6 +21,15 @@ class CombinePoses {
         rolling_avg_size_ = 6;
 
         debug_ = n_.advertise<std_msgs::String>("/debug", 100);
+}
+
+    double yawAngle(const geometry_msgs::Quaternion& q) {
+        double q_w = q.w;
+        double q_x = q.x;
+        double q_y = q.y;
+        double q_z = q.z;
+
+        return atan2(2*(q_w*q_z + q_y*q_x), -1.0 + 2 * (q_w*q_w + q_x*q_x));
     }
 
     void combine(const geometry_msgs::Pose::ConstPtr& pose) {
@@ -45,6 +54,19 @@ class CombinePoses {
         }
 
         mean[0] /= len; mean[1] /= len; mean[2] /= len;
+
+        // "Averaging" the quaternions with Mean of Circular Quantities formula from Wikipedia
+        double sinThetaSum = 0; double cosThetaSum = 0;
+        double lastSeenTheta = 0;
+        for (auto it = stored_poses_.cbegin(); it != stored_poses_.cend(); ++it) {
+            double angle = yawAngle(it->orientation);
+            
+            sinThetaSum += sin(angle);
+            cosThetaSum += cos(angle);
+            lastSeenTheta = angle;
+        }
+
+        double avgAngle = atan2(sinThetaSum, cosThetaSum);
 
         // Calc covariance vector
         std::vector<double> covariance;
@@ -94,12 +116,12 @@ class CombinePoses {
         thePoint.z = mean[2];
         combinedPose.pose.pose.position = thePoint;
 
-        // TODO
         geometry_msgs::Quaternion dir;
+        dir.w = cos(avgAngle/2);
         dir.x = 0;
         dir.y = 0;
-        dir.z = 1;
-        dir.w = 0;
+        dir.z = sin(avgAngle/2);
+
         combinedPose.pose.pose.orientation = dir;
 
         combinedPose.pose.covariance = newCovariance;

@@ -13,6 +13,7 @@
 
 #include <vector>
 #include <math.h>
+#include <cmath>
 #include <string>
 
 class SecondaryToPrimary {
@@ -71,12 +72,28 @@ class SecondaryToPrimary {
         newpt.y = cpose_y + rel_z * sin(theta) + rel_x * cos(theta);
         newpt.z = 0.1; // Doesn't matter. We're not flying
 
-        geometry_msgs::Quaternion newrot;
         double theta_new = theta + theta_april;
-        newrot.w = cos(theta/2);
+
+        // Need to transform different sides by a different angle
+        switch(id_april) {
+            case 0:
+                theta_new += 1.571;
+                break;
+            case 2:
+                theta_new += 4.712;
+                break;
+            case 3:
+                theta_new += 0.785;
+                break;
+            // case 1: theta_new += 0;
+        }
+        theta_new = std::fmod(theta_new, 3.1415926);
+
+        geometry_msgs::Quaternion newrot;
+        newrot.w = cos(theta_new/2);
         newrot.x = 0;
         newrot.y = 0;
-        newrot.z = sin(theta/2);
+        newrot.z = sin(theta_new/2);
 
         geometry_msgs::Pose thePose;
         thePose.position = newpt;
