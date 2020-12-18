@@ -1,5 +1,7 @@
 #include <ros/ros.h>
 
+#include <mcl/StampedAprilTagDetection.h>
+
 #include <apriltag_ros/AprilTagDetection.h>
 #include "apriltag_ros/common_functions.h"
 
@@ -9,7 +11,7 @@
 class PoseCallback {
   public:
 	PoseCallback() {
-		pub_ = n_.advertise<geometry_msgs::PoseWithCovarianceStamped>("tag_pose", 10);
+		pub_ = n_.advertise<mcl::StampedAprilTagDetection>("tag_pose", 10);
 		sub_ = n_.subscribe("tag_detections", 10, &PoseCallback::getPoseCallback, this);
 	}
 
@@ -19,14 +21,18 @@ class PoseCallback {
 			return;
 		}
 		apriltag_ros::AprilTagDetection tag = tags->detections.front();
-		geometry_msgs::PoseWithCovarianceStamped thePose = tag.pose;
 
-		pub_.publish(thePose);
+		mcl::StampedAprilTagDetection sTag;
+		sTag.tag = tag;
+		sTag.header = tag.pose.header;
+
+		pub_.publish(sTag);
 	}
 
   private:
     ros::NodeHandle n_;
 	ros::Publisher pub_;
+	ros::Publisher idPub_;
 	ros::Subscriber sub_;
 };
 

@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <geometry_msgs/Point.h>
+#include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Quaternion.h>
 #include <std_msgs/Header.h>
 #include <std_msgs/String.h>
@@ -10,28 +10,26 @@
 #include <math.h>
 #include <string>
 
-class PointsToCovariance {
+// Retains the lasn `rolling_avg_size_` poses and averages them.
+
+class CombinePoses {
   public:
-    PointsToCovariance() {
+    CombinePoses() {
         pub_ = n_.advertise<geometry_msgs::PoseWithCovarianceStamped>("/primary/estimated_position", 100);
-        sub_ = n_.subscribe<geometry_msgs::Point>("/primary/points", 100, &PointsToCovariance::covarianceCallback, this);
+        sub_ = n_.subscribe<geometry_msgs::Pose>("/primary/poses", 100, &CombinePoses::combine, this);
         
         rolling_avg_size_ = 6;
 
         debug_ = n_.advertise<std_msgs::String>("/debug", 100);
     }
 
-    void covarianceCallback(const geometry_msgs::Point::ConstPtr& point) {
+    void combine(const geometry_msgs::Pose::ConstPtr& pose) {
 
-        std_msgs::String dmsg;
-        dmsg.data = "START";
-        debug_.publish(dmsg);
-
-        if (stored_points_.size() >= rolling_avg_size_) {
-            stored_points_.pop_back();
+        if (stored_poses_.size() >= rolling_avg_size_) {
+            stored_poses_.pop_back();
         }
-        stored_points_.push_front(*point);
-        int len = stored_points_.size();
+        stored_poses_.push_front(*pose);
+        int len = stored_poses_.size();
 
         // I know that we can use the eigen library for a lot of this
         // but I don't want to deal with setting that up.
@@ -40,10 +38,10 @@ class PointsToCovariance {
         mean.push_back(0);
         mean.push_back(0);
 
-        for (auto it = stored_points_.cbegin(); it != stored_points_.cend(); ++it) {
-            mean[0] += it->x;
-            mean[1] += it->y;
-            mean[2] += it->z;
+        for (auto it = stored_poses_.cbegin(); it != stored_poses_.cend(); ++it) {
+            mean[0] += it->position.x;
+            mean[1] += it->position.y;
+            mean[2] += it->position.z;
         }
 
         mean[0] /= len; mean[1] /= len; mean[2] /= len;
@@ -53,15 +51,15 @@ class PointsToCovariance {
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 double sum = 0.0;
-                std::deque<geometry_msgs::Point>::iterator it = stored_points_.begin();
-                for (auto it = stored_points_.cbegin(); it != stored_points_.end(); ++it){
+                std::deque<geometry_msgs::Pose>::iterator it = stored_poses_.begin();
+                for (auto it = stored_poses_.cbegin(); it != stored_poses_.end(); ++it){
                     // There has got to be a better way to do this...
                     // ...But I can't think of it right now.
 
                     std::vector<double> curr;
-                    curr.push_back(it->x);
-                    curr.push_back(it->y);
-                    curr.push_back(it->z);
+                    curr.push_back(it->position.x);
+                    curr.push_back(it->position.y);
+                    curr.push_back(it->position.z);
                     sum += (curr[x] - mean[x])*(curr[y] - mean[y]);
                 }
                 sum /= (len - 1);
@@ -79,11 +77,9 @@ class PointsToCovariance {
         }
 
         // Getting the right datatype.
-        // O(1) option because it's bounded by 36 :)
+        // O(1) because it's bounded by 36 :)
         boost::array<double, 36> newCovariance;
         for (int i = 0; i < 36; i++) {
-            dmsg.data = "covloop";
-            debug_.publish(dmsg);
             newCovariance[i] = covariance[i];
         }
 
@@ -98,7 +94,7 @@ class PointsToCovariance {
         thePoint.z = mean[2];
         combinedPose.pose.pose.position = thePoint;
 
-        // Constant for now. Will set dynamically soon. With finite differencing?
+        // TODO
         geometry_msgs::Quaternion dir;
         dir.x = 0;
         dir.y = 0;
@@ -109,7 +105,7 @@ class PointsToCovariance {
         combinedPose.pose.covariance = newCovariance;
 
         std_msgs::String endmsg;
-        endmsg.data = std::to_string(stored_points_.size());
+        endmsg.data = std::to_string(stored_poses_.size());
         debug_.publish(endmsg);
 
 	    pub_.publish(combinedPose);
@@ -123,14 +119,14 @@ class PointsToCovariance {
 
     int rolling_avg_size_;
 
-    std::deque<geometry_msgs::Point> stored_points_;
+    std::deque<geometry_msgs::Pose> stored_poses_;
 
 }; 
 
 int main(int argc, char** argv){
-    ros::init(argc, argv, "calc_poseWithCovariance_from_points");
+    ros::init(argc, argv, "combine_poses");
 
-    PointsToCovariance pointsToPoseWithCovariance;
+    CombinePoses c;
 
     ros::spin();
     return 0;
